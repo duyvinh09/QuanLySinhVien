@@ -7,6 +7,7 @@ package studentsystem;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
+import java.util.Base64;
 
 /**
  *
@@ -20,6 +21,11 @@ public class SignUp extends javax.swing.JFrame {
     public SignUp() {
         initComponents();
         setLocationRelativeTo(null);
+        setResizable(false);
+    }
+    
+    public String encodeBase64(String password) {
+        return Base64.getEncoder().encodeToString(password.getBytes());
     }
 
     /**
@@ -185,43 +191,45 @@ public class SignUp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDangKyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangKyActionPerformed
-       String name = txtName.getText();
+        String name = txtName.getText();
         String user = txtUser.getText();
         String pass = txtMatKhau.getText();
         String pass1 = txtMatKhau1.getText();
-
-        if (!pass.equals(pass1)) {
-            lblThongBao.setText("Mật khẩu không đồng nhất");
+        
+        if (name.isEmpty() || user.isEmpty() || pass.isEmpty() || pass1.isEmpty()) {
+            lblThongBao.setText("Vui lòng nhập đầy đủ thông tin");
             return;
-        }
-
-        try {
-            String filename = "./Data/TaiKhoan.txt";
-            boolean userExists = false;
-
-            try (Scanner sc = new Scanner(new File(filename))) {
-                while (sc.hasNextLine()) {
-                    String fUser = sc.nextLine(); 
-                    sc.nextLine(); // Bỏ qua dòng chứa mật khẩu
-                    sc.nextLine(); // Bỏ qua dòng chứa tên
-                    if (user.equalsIgnoreCase(fUser)) {
-                        userExists = true;
-                        break;
-                    }
-                }
-            }
-
-            if (userExists) {
-                lblThongBao.setText("Tài khoản đã tồn tại! Vui lòng chọn tên đăng nhập khác.");
+        } else {
+            if (!pass.equals(pass1)) {
+                lblThongBao.setText("Mật khẩu không đồng nhất");
                 return;
             }
-
-            try (FileWriter fw = new FileWriter(filename, true)) {
-                fw.write("\n" + user + "\n" + pass + "\n" + name); // Ghi dữ liệu mới vào file
-                lblThongBao.setText("Thêm mới tài khoản thành công!");
+            try {
+                boolean userExists = false;
+                try (Scanner sc = new Scanner(new File("./Data/TaiKhoan.txt"))) {
+                    while (sc.hasNextLine()) {
+                        String fUser = sc.nextLine(); 
+                        sc.nextLine(); // Bỏ qua dòng chứa mật khẩu
+                        sc.nextLine(); // Bỏ qua dòng chứa tên
+                        if (user.equalsIgnoreCase(fUser)) {
+                            userExists = true;
+                            break;
+                        }
+                    }
+                }
+                if (userExists) {
+                    lblThongBao.setText("Tài khoản đã tồn tại! Vui lòng chọn tên đăng nhập khác.");
+                    return;
+                }
+                try (FileWriter fw = new FileWriter("./Data/TaiKhoan.txt", true)) {
+                    fw.write(user + "\n");
+                    fw.write(encodeBase64(pass) + "\n");  // Lưu mật khẩu đã mã hóa
+                    fw.write(name + "\n");
+                    lblThongBao.setText("Thêm mới tài khoản thành công!");
+                }
+            } catch (Exception e) {
+                lblThongBao.setText("Đã xảy ra lỗi trong quá trình thêm tài khoản.");
             }
-        } catch (Exception e) {
-            lblThongBao.setText("Đã xảy ra lỗi trong quá trình thêm tài khoản.");
         }
     }//GEN-LAST:event_btnDangKyActionPerformed
 

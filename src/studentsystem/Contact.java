@@ -24,6 +24,7 @@ public class Contact extends javax.swing.JFrame {
         this.txtMail.setEditable(false);
         this.txtLocal.setEditable(false);
         setLocationRelativeTo(null);
+        setResizable(false);
     }
 
     /**

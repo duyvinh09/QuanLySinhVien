@@ -10,18 +10,20 @@ public class Student {
     private boolean gender;
     private String phone;
     private String email;
+    private String location;
     private int age;
     private double toan;
     private double van;
     private double anh;
 
     // Constructor
-    public Student(String ID, String name, String birthdayStr, boolean gender, String phone, String email, double toan, double van, double anh) {
+    public Student(String ID, String name, String birthdayStr, boolean gender, String phone, String email, String location, double toan, double van, double anh) {
         this.ID = ID;
         this.name = name;
         this.gender = gender;
         this.phone = phone;
         this.email = email;
+        this.location = location;
         this.toan = toan;
         this.van = van;
         this.anh = anh;
@@ -83,6 +85,14 @@ public class Student {
     public void setEmail(String email) {
         this.email = email;
     }
+    
+    public String getLocation() {
+        return location;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
 //    public int getAge() {
 //        return age;
@@ -122,6 +132,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" + "ID=" + ID + ", name=" + name + ", birthday=" + birthday + ", gender=" + gender + ", phone=" + phone + ", email=" + email + ", age=" + age + ", toan=" + toan + ", van=" + van + ", anh=" + anh + '}';
+        return "Student{" + "ID=" + ID + ", name=" + name + ", birthday=" + birthday + ", gender=" + gender + ", phone=" + phone + ", email=" + email + ", location=" + location + ", age=" + age + ", toan=" + toan + ", van=" + van + ", anh=" + anh + '}';
     }
 }
